@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using JointsReduction;
 public class Driver : MonoBehaviour {
 
     // Use this for initialization
@@ -10,6 +10,7 @@ public class Driver : MonoBehaviour {
     private Quaternion [] m_r0sDst;
     private Vector3 m_t0Src;
     private Quaternion m_r0InvSrc;
+    private JointsMapInternal m_jointsmap = new JointsMapInternal();
 	void Start () {
         m_t0Src = transform.position;
         Quaternion r0 = transform.rotation;
@@ -20,12 +21,19 @@ public class Driver : MonoBehaviour {
         Debug.Log(log);
         m_t0sDst = new Vector3[m_drivens.Length];
         m_r0sDst = new Quaternion[m_drivens.Length];
+        string nameRootDst = "Armature/base";
+        Transform [] rootDst = new Transform[2];
         for (int i_driven = 0; i_driven < m_drivens.Length; i_driven ++)
         {
             Transform trans = m_drivens[i_driven].transform;
             m_t0sDst[i_driven] = trans.position;
             m_r0sDst[i_driven] = trans.rotation;
+            rootDst[i_driven] = trans.Find(nameRootDst);
         }
+
+        Transform rootSrc = transform.Find("CMU compliant skeleton/Hips");
+        Debug.Assert(null != rootSrc);
+        m_jointsmap.Initialize(rootSrc, rootDst[0], rootDst[1]);
     }
 
 	// Update is called once per frame
@@ -38,7 +46,7 @@ public class Driver : MonoBehaviour {
             Transform trans = m_drivens[i_driven].transform;
             trans.position = m_t0sDst[i_driven] + dT;
             trans.rotation = m_r0sDst[i_driven] * dR;
-         }
-
+        }
+        m_jointsmap.Update();
     }
 }
