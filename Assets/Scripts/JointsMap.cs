@@ -9,6 +9,7 @@ namespace JointsReduction
 {
 	class MapNode
 	{
+		private static bool DFN_DBGLOG = true;
 		public string name;
 		public Transform src;
 		public MapNode parent;
@@ -23,17 +24,46 @@ namespace JointsReduction
 				m0Inv = Matrix4x4.identity;
 			else
 				m0Inv = src.worldToLocalMatrix * parent.src.localToWorldMatrix;
+			if (DFN_DBGLOG && null != a_parent)
+			{
+				string logStr = string.Format("{0}=>{1}\n{2}=>{3}", name, parent.name, src.name, parent.src.name);
+				Matrix4x4 m0 = parent.src.worldToLocalMatrix * src.localToWorldMatrix;
+				Quaternion r = m0.rotation;
+				Vector3 t = new Vector3(m0.m03, m0.m13, m0.m23);
+				logStr += string.Format("\n\tr:{0,5:#.00}\t{1,5:#.00}\t{2,5:#.00}" +
+										"\n\tt:{3,5:#.00}\t{4,5:#.00}\t{5,5:#.00}"
+										, r.eulerAngles.x, r.eulerAngles.y, r.eulerAngles.z, t.x, t.y, t.z);
+				//Debug.Log(logStr);
+			}
 
 		}
 
-		public Matrix4x4 DeltaM()
+		public Matrix4x4 DeltaM_local()
 		{
 			if (null == parent)
 				return Matrix4x4.identity;
 			else
 			{
 				Matrix4x4 mt = parent.src.worldToLocalMatrix * src.localToWorldMatrix;
-				return mt*m0Inv;
+				if (DFN_DBGLOG)
+				{
+					Quaternion r = mt.rotation;
+					Vector3 t = new Vector3(mt.m03, mt.m13, mt.m23);
+					string logStr = string.Format("{0}=>{1}", name, parent.name);
+					logStr += string.Format("\nm(t):{0}=>{1}:" +
+														"\n\tr:{2,5:#.00}\t{3,5:#.00}\t{4,5:#.00}\t{5,5:#.00}" +
+														"\n\tt:{6,5:#.00}\t{7,5:#.00}\t{8,5:#.00}"
+														,src.name, parent.src.name, r.w, r.x, r.y, r.z, t.x, t.y, t.z);
+
+					Quaternion r0 = m0Inv.rotation;
+					Vector3 t0 = new Vector3(m0Inv.m03, m0Inv.m13, m0Inv.m23);
+					logStr += string.Format("\nm(0)Inv(0):{0}=>{1}:" +
+														"\n\tr:{2,5:#.00}\t{3,5:#.00}\t{4,5:#.00}\t{5,5:#.00}" +
+														"\n\tt:{6,5:#.00}\t{7,5:#.00}\t{8,5:#.00}"
+														,src.name, parent.src.name, r0.w, r0.x, r0.y, r0.z, t0.x, t0.y, t0.z);
+					//Debug.Log(logStr);
+				}
+				return m0Inv*mt;
 			}
 		}
 	};

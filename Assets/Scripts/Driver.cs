@@ -22,7 +22,7 @@ public class Driver : MonoBehaviour {
 		Debug.Log(log);
 		m_t0sDst = new Vector3[m_drivens.Length];
 		m_r0sDst = new Quaternion[m_drivens.Length];
-		string nameRootDst = "Armature/base";
+		string nameRootDst = "Armature";
 		Transform [] rootDst = new Transform[2];
 		for (int i_driven = 0; i_driven < m_drivens.Length; i_driven ++)
 		{
@@ -32,9 +32,9 @@ public class Driver : MonoBehaviour {
 			rootDst[i_driven] = trans.Find(nameRootDst);
 		}
 
-		Transform rootSrc = transform.Find("CMU compliant skeleton/Hips");
+		Transform rootSrc = transform.Find("CMU compliant skeleton");
 		Debug.Assert(null != rootSrc);
-		m_jointsmap.Initialize(rootSrc, rootDst[0], rootDst[1]);
+		m_jointsmap.Initialize(rootSrc, rootDst[0], rootDst[1], transform, m_drivens[0].transform, m_drivens[1].transform);
 
 
 	}
