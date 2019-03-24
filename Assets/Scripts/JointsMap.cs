@@ -15,15 +15,23 @@ namespace JointsReduction
 		public MapNode parent;
 		public ArrayList children = new ArrayList();
 		private Matrix4x4 m0Inv;
+		private Matrix4x4 m0InvCmp;
+
 		public MapNode(Transform a_src, string a_name, MapNode a_parent)
 		{
 			src = a_src;
 			name = a_name;
 			parent = a_parent;
 			if (null == parent)
+			{
 				m0Inv = Matrix4x4.identity;
+				m0InvCmp = Matrix4x4.identity;
+			}
 			else
+			{
 				m0Inv = src.worldToLocalMatrix * parent.src.localToWorldMatrix;
+				m0InvCmp = src.worldToLocalMatrix * src.parent.localToWorldMatrix;
+			}
 			if (DFN_DBGLOG && null != a_parent)
 			{
 				string logStr = string.Format("{0}=>{1}\n{2}=>{3}", name, parent.name, src.name, parent.src.name);
@@ -64,6 +72,17 @@ namespace JointsReduction
 					//Debug.Log(logStr);
 				}
 				return m0Inv*mt;
+			}
+		}
+
+		public Matrix4x4 DeltaM_localCmp()
+		{
+			if (null == parent)
+				return Matrix4x4.identity;
+			else
+			{
+				Matrix4x4 mt = src.parent.worldToLocalMatrix * src.localToWorldMatrix;
+				return m0InvCmp*mt;
 			}
 		}
 	};

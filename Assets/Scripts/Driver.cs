@@ -6,6 +6,8 @@ public class Driver : MonoBehaviour {
 
 	// Use this for initialization
 	public GameObject [] m_drivens;
+	public GameObject m_camera;
+	private Vector3 m_t0Cam;
 	private Vector3 [] m_t0sDst;
 	private Quaternion [] m_r0sDst;
 	private Vector3 m_t0Src;
@@ -36,7 +38,7 @@ public class Driver : MonoBehaviour {
 		Debug.Assert(null != rootSrc);
 		m_jointsmap.Initialize(rootSrc, rootDst[0], rootDst[1], transform, m_drivens[0].transform, m_drivens[1].transform);
 
-
+		m_t0Cam = m_camera.transform.position;
 	}
 
 	// Update is called once per frame
@@ -51,5 +53,7 @@ public class Driver : MonoBehaviour {
 			trans.rotation = m_r0sDst[i_driven] * dR;
 		}
 		m_jointsmap.Update();
+
+		m_camera.transform.position = m_t0Cam + dT;
 	}
 }
