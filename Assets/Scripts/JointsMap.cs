@@ -15,15 +15,23 @@ namespace JointsReduction
 		public MapNode parent;
 		public ArrayList children = new ArrayList();
 		private Matrix4x4 m0Inv;
+		private Matrix4x4 m0InvCmp;
+
 		public MapNode(Transform a_src, string a_name, MapNode a_parent)
 		{
 			src = a_src;
 			name = a_name;
 			parent = a_parent;
 			if (null == parent)
+			{
 				m0Inv = Matrix4x4.identity;
+				m0InvCmp = Matrix4x4.identity;
+			}
 			else
+			{
 				m0Inv = src.worldToLocalMatrix * parent.src.localToWorldMatrix;
+				m0InvCmp = src.worldToLocalMatrix * src.parent.localToWorldMatrix;
+			}
 			if (DFN_DBGLOG && null != a_parent)
 			{
 				string logStr = string.Format("{0}=>{1}\n{2}=>{3}", name, parent.name, src.name, parent.src.name);
@@ -64,6 +72,17 @@ namespace JointsReduction
 					//Debug.Log(logStr);
 				}
 				return m0Inv*mt;
+			}
+		}
+
+		public Matrix4x4 DeltaM_localCmp()
+		{
+			if (null == parent)
+				return Matrix4x4.identity;
+			else
+			{
+				Matrix4x4 mt = src.parent.worldToLocalMatrix * src.localToWorldMatrix;
+				return m0InvCmp*mt;
 			}
 		}
 	};
@@ -129,14 +148,15 @@ namespace JointsReduction
 			}
 		};
 
-		public void Initialize(Transform root)
+		public void Initialize(Transform root, string[] j_ori, string[] j_red)
 		{
+			Debug.Assert(j_ori.Length == j_red.Length);
 			Dictionary<string, string> Ori2Redu = new Dictionary<string, string>();
 			Dictionary<string, string> Redu2Ori = new Dictionary<string, string>();
-			for (int i_map = 0; i_map < s_map.Length; i_map += 2)
+			for (int i_map = 0; i_map < j_ori.Length; i_map ++)
 			{
-				string ori = s_map[i_map];
-				string red = s_map[i_map + 1];
+				string ori = j_ori[i_map];
+				string red = j_red[i_map];
 				Ori2Redu[ori] = red;
 				Redu2Ori[red] = ori;
 			}
