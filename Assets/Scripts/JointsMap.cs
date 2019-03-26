@@ -148,14 +148,15 @@ namespace JointsReduction
 			}
 		};
 
-		public void Initialize(Transform root)
+		public void Initialize(Transform root, string[] j_ori, string[] j_red)
 		{
+			Debug.Assert(j_ori.Length == j_red.Length);
 			Dictionary<string, string> Ori2Redu = new Dictionary<string, string>();
 			Dictionary<string, string> Redu2Ori = new Dictionary<string, string>();
-			for (int i_map = 0; i_map < s_map.Length; i_map += 2)
+			for (int i_map = 0; i_map < j_ori.Length; i_map ++)
 			{
-				string ori = s_map[i_map];
-				string red = s_map[i_map + 1];
+				string ori = j_ori[i_map];
+				string red = j_red[i_map];
 				Ori2Redu[ori] = red;
 				Redu2Ori[red] = ori;
 			}

@@ -42,7 +42,7 @@ namespace JointsReduction
 													, deltaM_s.m10, deltaM_s.m11, deltaM_s.m12, deltaM_s.m13
 													, deltaM_s.m20, deltaM_s.m21, deltaM_s.m22, deltaM_s.m23
 													, deltaM_s.m30, deltaM_s.m31, deltaM_s.m32, deltaM_s.m33);
-					Debug.Log(str);
+					//Debug.Log(str);
 				}
 				Matrix4x4 deltaM_d = m0_s2d * deltaM_s * m0_d2s;
 				Matrix4x4 mt = m0 * deltaM_d;
@@ -66,9 +66,10 @@ namespace JointsReduction
 		private MapNodeTube m_rootTubeIgnore;
 		private MapNodeTube m_rootTubeRedu;
 		public new void Initialize(Transform rootSrc, Transform rootDstIgnore, Transform rootDstRedu
-								, Transform baseSrc, Transform baseDstIgnore, Transform baseDstRedu)
+								, Transform baseSrc, Transform baseDstIgnore, Transform baseDstRedu
+								, string[] j_ori, string[] j_redu)
 		{
-			base.Initialize(rootSrc);
+			base.Initialize(rootSrc, j_ori, j_redu);
 			m_rootTubeRedu = ConstructTubeTree(rootDstRedu, baseSrc, baseDstRedu);
 			m_rootTubeIgnore = ConstructTubeTree(rootDstIgnore, baseSrc, baseDstIgnore);
 		}
