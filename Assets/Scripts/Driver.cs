@@ -6,6 +6,8 @@ public class Driver : MonoBehaviour {
 
 	// Use this for initialization
 	public GameObject [] m_drivens;
+	public GameObject [] m_drivensJR;
+	public GameObject    m_drivingJR;
 	public GameObject m_camera;
 	public string [] m_oriJs;
 	public string [] m_reduJs;
@@ -26,18 +28,15 @@ public class Driver : MonoBehaviour {
 		Debug.Log(log);
 		m_t0sDst = new Vector3[m_drivens.Length];
 		m_r0sDst = new Quaternion[m_drivens.Length];
-		string nameRootDst = "Armature";
-		Transform [] rootDst = new Transform[2];
+		Transform [] rootDst = new Transform[2] {m_drivensJR[0].transform, m_drivensJR[1].transform};
 		for (int i_driven = 0; i_driven < m_drivens.Length; i_driven ++)
 		{
 			Transform trans = m_drivens[i_driven].transform;
 			m_t0sDst[i_driven] = trans.position;
 			m_r0sDst[i_driven] = trans.rotation;
-			rootDst[i_driven] = trans.Find(nameRootDst);
 		}
 
-		//Transform rootSrc = transform.Find("CMU compliant skeleton");
-		Transform rootSrc = transform.Find("Armature");
+		Transform rootSrc = m_drivingJR.transform;
 		Debug.Assert(null != rootSrc);
 		m_jointsmap.Initialize(rootSrc, rootDst[0], rootDst[1]
 			, transform, m_drivens[0].transform, m_drivens[1].transform

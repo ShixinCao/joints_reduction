@@ -1890,6 +1890,11 @@ Transform:
   m_Father: {fileID: 1671012279}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -0.0001, y: -0.00029999999, z: -23.7172}
+--- !u!1 &1032893211 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1899885317268496, guid: 76a323cbeb7e2b74da3159498bc1fb99,
+    type: 2}
+  m_PrefabInternal: {fileID: 1809174269}
 --- !u!1 &1064995786
 GameObject:
   m_ObjectHideFlags: 0
@@ -2933,7 +2938,45 @@ MonoBehaviour:
   m_drivens:
   - {fileID: 1936218372}
   - {fileID: 311057738}
+  m_drivensJR:
+  - {fileID: 1032893211}
+  - {fileID: 1878382494}
+  m_drivingJR: {fileID: 1920664019}
   m_camera: {fileID: 555773700}
+  m_oriJs:
+  - CMU compliant skeleton
+  - Hips
+  - LowerBack
+  - LeftUpLeg
+  - RightUpLeg
+  - LeftLeg
+  - RightLeg
+  - LeftFoot
+  - Neck
+  - RightFoot
+  - LeftArm
+  - RightArm
+  - LeftForeArm
+  - RightForeArm
+  - LeftHand
+  - RightHand
+  m_reduJs:
+  - Armature
+  - base
+  - back
+  - hip_l
+  - hip_r
+  - knee_l
+  - knee_r
+  - ankle_l
+  - cervical
+  - ankle_r
+  - shoulder_l
+  - shoulder_r
+  - elbow_l
+  - elbow_r
+  - wrist_l
+  - wrist_r
 --- !u!1 &1665691464
 GameObject:
   m_ObjectHideFlags: 0
@@ -3229,6 +3272,11 @@ Transform:
   m_Father: {fileID: 1176568206}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -0.7186, y: 9.0391, z: -42.9251}
+--- !u!1 &1878382494 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1899885317268496, guid: 76a323cbeb7e2b74da3159498bc1fb99,
+    type: 2}
+  m_PrefabInternal: {fileID: 670044742}
 --- !u!1 &1882039328
 GameObject:
   m_ObjectHideFlags: 0
@@ -3300,6 +3348,10 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1882039328}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1920664019 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100002, guid: 30c75298e2e2dfc4ebc388baed645be3, type: 3}
+  m_PrefabInternal: {fileID: 1445959753}
 --- !u!1 &1930902995
 GameObject:
   m_ObjectHideFlags: 0
