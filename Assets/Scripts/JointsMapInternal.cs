@@ -42,7 +42,7 @@ namespace JointsReduction
 													, deltaM_s.m10, deltaM_s.m11, deltaM_s.m12, deltaM_s.m13
 													, deltaM_s.m20, deltaM_s.m21, deltaM_s.m22, deltaM_s.m23
 													, deltaM_s.m30, deltaM_s.m31, deltaM_s.m32, deltaM_s.m33);
-					Debug.Log(str);
+					//Debug.Log(str);
 				}
 				Matrix4x4 deltaM_d = m0_s2d * deltaM_s * m0_d2s;
 				Matrix4x4 mt = m0 * deltaM_d;
@@ -50,14 +50,28 @@ namespace JointsReduction
 				nodeOut.localPosition = new Vector3(mt.m03, mt.m13, mt.m23);
 			}
 
+			public void UpdateCmp()
+			{
+				Debug.Assert(nodeIn.name == nodeOut.name);
+				Matrix4x4 deltaM_s = nodeIn.DeltaM_localCmp();
+				Matrix4x4 deltaM_d = m0_s2d * deltaM_s * m0_d2s;
+				Matrix4x4 mt = m0 * deltaM_d;
+				nodeOut.localRotation = mt.rotation;
+				nodeOut.localPosition = new Vector3(mt.m03, mt.m13, mt.m23);
+			}
+
+
+
 		};
 		private MapNodeTube m_rootTubeIgnore;
 		private MapNodeTube m_rootTubeRedu;
 		public new void Initialize(Transform rootSrc, Transform rootDstIgnore, Transform rootDstRedu
-								, Transform baseSrc, Transform baseDstIgnore, Transform baseDstRedu)
+								, Transform baseSrc, Transform baseDstIgnore, Transform baseDstRedu
+								, string[] j_ori, string[] j_redu)
 		{
-			base.Initialize(rootSrc);
+			base.Initialize(rootSrc, j_ori, j_redu);
 			m_rootTubeRedu = ConstructTubeTree(rootDstRedu, baseSrc, baseDstRedu);
+			m_rootTubeIgnore = ConstructTubeTree(rootDstIgnore, baseSrc, baseDstIgnore);
 		}
 
 
@@ -107,10 +121,27 @@ namespace JointsReduction
 			}
 		}
 
+		private void UpdateTubeCmp(MapNodeTube tube15)
+		{
+			Queue<MapNodeTube> bfsQ = new Queue<MapNodeTube>();
+			bfsQ.Enqueue(tube15);
+			while (bfsQ.Count > 0)
+			{
+				MapNodeTube p_tube = bfsQ.Dequeue();
+				p_tube.UpdateCmp();
+				for (int i_child = 0; i_child < p_tube.children.Length; i_child ++)
+				{
+					MapNodeTube c_tube = p_tube.children[i_child];
+					bfsQ.Enqueue(c_tube);
+				}
+			}
+		}
+
 		public void Update()
 		{
 			//traverse the tubetree to send output to transform
 			UpdateTube(m_rootTubeRedu);
+			UpdateTubeCmp(m_rootTubeIgnore);
 		}
 
 	}
